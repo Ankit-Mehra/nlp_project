@@ -148,7 +148,7 @@ def remove_negative(stop_words):
     for word in negetive_words:
         if word in stop_words:
             stop_words.remove(word)
-            
+
     return stop_words
 
 def clean_data(data_sample_excluded)-> pd.DataFrame:
@@ -177,5 +177,32 @@ def clean_data(data_sample_excluded)-> pd.DataFrame:
     feature_target_data = pd.DataFrame()
     feature_target_data['clean_text'] = x_train
     feature_target_data['sentiment'] = y_train
+
+    return feature_target_data
+
+def clean_data_helpfulness(data_sample_excluded)-> pd.DataFrame:
+    """
+    Clean the colums 'reviewText' and 'summary' and
+    return the clean text
+    """
+    #concatenate the 'reviewText' and 'summary' columns
+    data_sample_excluded['reveiwTextSummary'] = concat_columns(data_sample_excluded,
+                                                               'reviewText', 'summary')
+
+    #add a sentiment column with labels positive and negative and neutral
+    data_sample_excluded['sentiment'] = data_sample_excluded['overall'].apply(label)
+
+    #drop the null values and reset the index
+    data_sample_excluded = drop_na(data_sample_excluded)
+
+    print("Cleaning the text...")
+    #clean the reviewTextSummary column
+    data_sample_excluded['clean_text'] = data_sample_excluded['reveiwTextSummary'].apply(clean_text)
+
+    # make a dataframe with the clean_text and sentiment columns
+    feature_target_data = pd.DataFrame()
+    feature_target_data['clean_text'] = data_sample_excluded['clean_text']
+    feature_target_data['helpful'] = data_sample_excluded['helpful']
+    feature_target_data['sentiment'] =  data_sample_excluded['sentiment']
 
     return feature_target_data

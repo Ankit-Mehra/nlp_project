@@ -25,7 +25,7 @@ def svc_fit(feature:pd.Series, target:pd.Series)-> SVC:
 def best_svc_fit(feature:pd.Series, target:pd.Series)-> SVC:
     """
     Train the SVC model with following parameters:
-    {'svm__C': 1,
+    {'svm__C': 10,
     #  'svm__kernel': 'rbf',
     #  'tfidf__max_features': 5000,
     #  'tfidf__ngram_range': (1, 2)}
@@ -34,7 +34,7 @@ def best_svc_fit(feature:pd.Series, target:pd.Series)-> SVC:
     pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(max_features=5000,
                                   ngram_range=(1,2))),
-        ('svm', SVC(C=1,kernel='rbf'))
+        ('svm', SVC(C=10,kernel='rbf'))
     ])
 
     svc = pipeline.fit(feature, target)
@@ -100,6 +100,11 @@ def hypertune_svc(df:pd.DataFrame,target_col:str)-> (float,float):
     """
     # split the data into train and test sets
     x_train, y_train, x_test, y_test = split_data(df, target_col)
+    
+    # encode the target variables using label encoder
+    labler = LabelEncoder()
+    y_train = labler.fit_transform(y_train)
+    y_test = labler.fit_transform(y_test)
 
     print("Hypertuning the SVC model...")
     # hypertune the model
@@ -136,7 +141,7 @@ def split_data(df,target_col:str)->(pd.DataFrame,pd.DataFrame,
 
 def best_param_svc(df:pd.DataFrame,target_col:str)-> SVC:
     """
-    Train the SVC model using SMOTE
+    Train the SVC model using the best parameters
     """
     # split the data into train and test sets
     x_train, y_train, x_test, y_test = split_data(df, target_col)

@@ -11,7 +11,7 @@ import pandas as pd
 def svc_hypertune(x_train:pd.Series,
                     y_train:pd.Series)-> GridSearchCV:
     """
-    Hypertune the SVM model
+    Hypertune the SVC model
     """
     # create a pipeline
     pipeline = Pipeline([
@@ -28,7 +28,7 @@ def svc_hypertune(x_train:pd.Series,
     }
 
     # hypertune the model
-    print("Hypertuning the SVM model...")
+    print("Hypertuning the SVC model...")
     grid_search = GridSearchCV(pipeline,
                                 parameters,
                                 cv=5,

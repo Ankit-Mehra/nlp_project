@@ -52,7 +52,7 @@ def make_prediction_sample():
     # make the predictions
     y_pred = best_model.predict(feature)
 
-    # change numeric labels to string 
+    # change numeric labels to string
     # labels of positive, negative and neutral using label encoder
     y_pred = label_encoder.inverse_transform(y_pred)
 

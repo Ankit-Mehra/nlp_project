@@ -18,6 +18,7 @@ def make_comparison_data()-> pd.DataFrame:
     vader = pd.read_csv('./data/vader_predicted.csv')
     svc_predicted_data = pd.read_csv('./data/svc_predicted.csv')
     logistic_predicted_data = pd.read_csv('./data/logistic_predicted.csv')
+    state_svc_predicted_data = pd.read_csv('./data/state_svc_predicted.csv')
 
     df_comparison = pd.DataFrame()
     df_comparison['clean_text'] = texblob['clean_text']
@@ -26,6 +27,7 @@ def make_comparison_data()-> pd.DataFrame:
     df_comparison['predicted_vader'] = vader['predicted_vader']
     df_comparison['predicted_svc'] = svc_predicted_data['svc_predicted']
     df_comparison['predicted_logistic'] = logistic_predicted_data['logistic_predicted']
+    df_comparison['predicted_state_svc'] = state_svc_predicted_data['state_predicted']
 
     #save the dataframe
     save_data(df_comparison,'./data/comparison_data.csv')
@@ -38,7 +40,7 @@ def metrics_comparison_table():
     :return: dataframe
     """
     metrics_table = pd.DataFrame(columns=['Accuracy','Precision','Recall','F1'],
-                                 index=['Texblob','Vader','SVC','Logistic'])
+                                 index=['Texblob','Vader','SVC','Logistic','State SVC'])
 
     compare_data = pd.read_csv('./data/comparison_data.csv')
 
@@ -62,6 +64,11 @@ def metrics_comparison_table():
                                                     'sentiment','predicted_logistic',
                                                     'Logistic')
     
+    #state_svc
+    metrics_table = add_metrics_to_comparison_table(compare_data,metrics_table,
+                                                    'sentiment','predicted_state_svc',
+                                                    'State SVC')
+
     #save the dataframe
     save_data(metrics_table,'./data/metrics_comparison_table.csv')
 

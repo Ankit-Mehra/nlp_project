@@ -38,6 +38,26 @@ def predict_sample():
     # save the data
     data.to_csv('data/logistic_predicted.csv', index=False)
 
+def predict(row):
+    """
+    predict sentiment on the given row
+    """
+    # load the best model from the pickle file
+    model_path = 'models/log_best.pkl'
+    label_encoder_path = 'models/log_label_encoder.pkl'
+
+    best_model = joblib.load(model_path)
+    label_encoder = joblib.load(label_encoder_path)
+
+    # make the predictions
+    y_pred = best_model.predict([row])
+
+    # change numeric labels to string
+    # labels of positive, negative and neutral using label encoder
+    y_pred = label_encoder.inverse_transform(y_pred)
+
+    return y_pred[0]
+
 if __name__ == "__main__":
     predict_sample()
  
